@@ -6,7 +6,6 @@ services:
     startCommand: "npm start"
     plan: free
     region: oregon
-    instances: 1
     envVars:
       - key: PORT
         value: "50051"

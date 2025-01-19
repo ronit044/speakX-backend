@@ -2,35 +2,26 @@ syntax = "proto3";
 
 package question;
 
-// Define the request message format
 message SearchRequest {
-  string query = 1;  // Search query string
-  int32 page = 2;    // Page number
-  int32 limit = 3;   // Number of results per page
+  string query = 1; 
+  int32 page = 2;
+  int32 limit = 3;
 }
-
-// Define the response message format
 message SearchResponse {
-  repeated Question questions = 1;  // Array of found questions
+  repeated Question questions = 1; 
 }
-
-// Define the Question message
 message Question {
   string title = 1;
   string type = 2;
   string solution = 3;
-  repeated Block blocks = 4;  // Nested structure for blocks
-  string siblingId = 5;       // Sibling ID (if available)
+  repeated Block blocks = 4; 
+  string siblingId = 5;
 }
-
-// Define the Block structure
 message Block {
   string text = 1;
   bool showInOption = 2;
   bool isAnswer = 3;
 }
-
-// Define the gRPC service
 service QuestionService {
-  rpc searchQuestions (SearchRequest) returns (SearchResponse);
+  rpc searchQuestions(SearchRequest) returns(SearchResponse);
 }

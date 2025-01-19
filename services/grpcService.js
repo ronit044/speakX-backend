@@ -1,30 +1,33 @@
-const { db } = require('../app'); // Import the db object
+const {connectDB}=require("../app")
+// const grpc = require('@grpc/grpc-js');
 
-const searchQuestions = async (call, callback) => {
-  const { query, page, limit } = call.request;
-  console.log("Request received:", call.request);
-  console.log("Regex Query:", new RegExp(query, 'i'));
-
+const searchQuestions=async(call, callback)=>{
+  // console.log("req body:",call.request);
+  const {query,page,limit}=call.request;
   try {
-    // Query the "Questions" collection in the "xyz" database
-    const questions = await db.collection('Questions') // Access the Questions collection
-      .find({ title: new RegExp(query, 'i') }) // Search by title field using regex
-      .skip((page - 1) * limit) // Pagination (skip for page)
-      .limit(limit) // Limit the number of results per page
-      .toArray(); // Convert cursor to an array of documents
+    const db=await connectDB();
+    // console.log(db);
+    const questions=await db.collection('Questions')
+      .find({title:new RegExp(query,'i') })
+      .skip((page-1)*limit)
+      .limit(limit)
+      .toArray();
+    // if(db){
+    // db.close();
+    // console.log('db disconnected')
+    // }
+    // if (questions.length === 0) {
+    //   console.log('no matching query!!!!');
+    // } else {
+    //   console.log('question array:-->>', questions);
+    // }
 
-    if (questions.length === 0) {
-      console.log('No matching questions found.');
-    } else {
-      console.log('Found questions:', questions);
-    }
-
-    callback(null, { questions });
-  } catch (err) {
-    console.error('Error in searchQuestions:', err);
-    callback({
-      code: grpc.status.INTERNAL,
-      details: 'Error in fetching questions'
-    });
+callback(null,{questions});
+  } 
+  catch (err) {
+    console.error('error is:----> ', err);
+    callback(err);
   }
 };
+
+module.exports=searchQuestions

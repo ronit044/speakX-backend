@@ -24,6 +24,7 @@ jobs:
       - name: npm install
         run: |
           npm install
+          npm build
 
 
       - name: Zip artifact for deployment

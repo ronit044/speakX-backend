@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 //TODO: to be replaced in dotenv file
-const uri='mongodb+srv://myAtlasDBUser:ashu6608@myatlasclusteredu.6tc93ao.mongodb.net?retryWrites=true&w=majority&appName=myAtlasClusterEDU'; 
+const uri=process.env.MONGO_URI; 
 let db;
 const connectDB=async () => {
   try {

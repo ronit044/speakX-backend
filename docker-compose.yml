@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  grpc-server:
+    build:
+      context: .
+      dockerfile: dockerfile.grpc
+    container_name: grpc_server
+    ports:
+      - "8585:8585"
+    networks:
+      - app_network
+    env_file:                # Load environment variables from .env file
+      - .env
+
+  envoy:
+    build:
+      context: .
+      dockerfile: dockerfile.envoy
+    container_name: envoy
+    ports:
+      - "10000:10000"
+    networks:
+      - app_network
+    depends_on:
+      - grpc-server
+    environment:             # Pass necessary variables to Envoy (if needed)
+      - GRPC_HOST=grpc-server
+      - GRPC_PORT=8585
+      
+networks:
+  app_network:
+    driver: bridge
